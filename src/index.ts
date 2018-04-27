@@ -1,45 +1,53 @@
+//import { FigureInterface } from './figure.interface';
 
-class Figuras {
+var readlineSync = require('readline-sync');
 
-	area: number;
-	perimetro: number;
-	figura: string;
+class Figura {
+	private tipo: string;
 
-	constructor(
-		area:number,
-		perimetro:number,
-		figura: string
-	){
-		this.area = area;
-		this.perimetro = perimetro;
-		this.figura = figura;
+	constructor( tipo:string ){
+		this.tipo = tipo;
 	}
 
-	generarArea():void {
-		console.log("Mi área es: " + this.area);
+	protected obtenerNombreFigura(): string {
+		console.log(this.tipo);
+		return this.tipo;
 	}
-
-	generarPerimetro():void {
-		console.log("Mi perímetro es: " + this.perimetro);
-	}
-
-	identificarFigura():void {
-		console.log("Soy: " + this.figura );
-	}
-
 }
 
+abstract class Operaciones {
+	abstract obtenerParametros(): void;
+	abstract sacarArea(): number;
+	abstract sacarPerimetro(): number;
+}
 
+class Triangulo extends Figura implements Operaciones {
+	private lado:number = 0; 
+	private altura:number = 0;
 
+	constructor(){
+		super('Figura: triangulo');
+		this.obtenerParametros();
+		this.obtenerNombreFigura();
+	}
 
-/*var readlineSync = require('readline-sync');
- 
-// Wait for user's response.
-var userName = readlineSync.question('May I have your name? ');
-console.log('Hi ' + userName + '!');
- 
-// Handle the secret text (e.g. password).
-var favFood = readlineSync.question('What is your favorite food? ', {
-	hideEchoBack: true // The typed text on screen is hidden by `*` (default).
-});
-console.log('Oh, ' + userName + ' loves ' + favFood + '!');*/
+	obtenerParametros() {
+		this.lado = readlineSync.question('Ingresa lado: ');
+		this.altura = readlineSync.question('Ingresa altura: ');
+	}
+
+	sacarArea() {
+		console.log( 'Area: ' + (this.lado * this.altura) / 2 );
+		return (this.lado * this.altura) / 2;
+	}
+
+	sacarPerimetro() {
+		console.log( 'Perímetro: ' + this.lado * 3);
+		return this.lado * 3;
+	}
+}
+
+var figura1 = new Triangulo();
+figura1.sacarArea();
+figura1.sacarPerimetro();
+
